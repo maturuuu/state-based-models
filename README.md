@@ -3,7 +3,6 @@ A program that simulates blind and heuristic pathfinding, then evaluates their r
 
 In partial completion of the requirements for the course **CSINTSY** | _Introduction to Intelligent Systems_
 
-
 Members: 
 1. Amor De Guzman
 2. Audrey Stinson
