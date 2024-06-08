@@ -22,7 +22,6 @@ public class bfs {
             System.out.println("\nNo path exists from " + startCity + " to " + goalCity);
          else 
             System.out.println("\nOptimal Path from " + startCity + " to " + goalCity + ":\n" + pathStartToFinish);
-        
     }
     
     // Add Paths to outerMap
