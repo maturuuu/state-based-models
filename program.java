@@ -9,6 +9,8 @@ public class program {
         Map<String, Integer> heuristicMap = new HashMap<>();
         int[] heuristicVal = new int[7];
 
+        System.out.println("\nCities: Dallas, San Francisco, Los Angeles, Boston, New York, Miami, Chicago");
+
         // User defines start and goal
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter start city: ");
@@ -36,40 +38,78 @@ public class program {
         // Create maps
         createMap(outerMap, heuristicMap, heuristicVal);
 
-        // //debugging
-        // for (Map.Entry<String, Integer> entry : heuristicMap.entrySet()) {
-        //     String city = entry.getKey();
-        //     Integer heuristicValue = entry.getValue();
-        //     System.out.println("City: " + city + ", Heuristic value: " + heuristicValue);
-        // }
-        // //debugging ^
+        /* debugging
+        for (Map.Entry<String, Integer> entry : heuristicMap.entrySet()) {
+             String city = entry.getKey();
+             Integer heuristicValue = entry.getValue();
+             System.out.println("City: " + city + ", Heuristic value: " + heuristicValue);
+         }
+        debugging ^ */
+
+        System.out.printf("%nPaths in Map");
+        displayOuterMap(4, outerMap);
+        System.out.printf("%nHeuristic Values");
+        displayHeuristicMap(heuristicMap);
 
         // execute BFS
+        System.out.println("\n\nUsing Breadth First Search:");
         List<String> pathStartToFinish = breadthFirstSearch(outerMap, startCity, goalCity);
         if (pathStartToFinish.isEmpty()){
-            System.out.println("\nNo path exists from " + startCity + " to " + goalCity);
+            System.out.println("No path exists from " + startCity + " to " + goalCity);
         }
         else {
-            System.out.println("\n[BFS] Path from " + startCity + " to " + goalCity + ":" + pathStartToFinish);
+            System.out.println("Path from " + startCity + " to " + goalCity);
             int BFScost = calculateTotalPathCost(pathStartToFinish, outerMap);
-            System.out.println("Total path cost: " + BFScost);
+            System.out.println("\nTotal Path Cost: " + BFScost);
+            displayFinalPath(pathStartToFinish);
         }
             
         // execute Greedy best-first search
+        System.out.println("\n\nUsing Greedy Best-First Search:");
         List<String> pathStartToFinishGreedy = greedyBestFirstSearch(outerMap, heuristicMap, startCity, goalCity);
         if (pathStartToFinishGreedy.isEmpty()) {
-            System.out.println("\nNo path exists from " + startCity + " to " + goalCity);
+            System.out.println("No path exists from " + startCity + " to " + goalCity);
         } 
         else { 
-            System.out.println("\n[Greedy] Path from " + startCity + " to " + goalCity + ": " + pathStartToFinishGreedy);
+            System.out.println("Path from " + startCity + " to " + goalCity);
             int Greedycost = calculateTotalPathCost(pathStartToFinishGreedy, outerMap);
-            System.out.println("Total path cost: " + Greedycost);
+            System.out.println("\nTotal Path Cost: " + Greedycost);
+            displayFinalPath(pathStartToFinishGreedy);
         }
     }
 
     //--------------------------------------------------------------------------------------------
     //Utility methods below
 
+    //Display city paths and distance
+    public static void displayOuterMap(int leftPadding, Map<?, ?> map) {
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                System.out.printf("%nCities to %s:", entry.getKey());
+                displayOuterMap(leftPadding + 2, (Map<?, ?>) entry.getValue());
+                System.out.println();
+            }
+            else {
+                System.out.printf("%n%" + (leftPadding) + "s%-15s (Distance: %s)",
+                "", entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
+    //Display cities and heuristic values
+    public static void displayHeuristicMap(Map<String, Integer> map) {
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.printf("%n%-15s : %s", entry.getKey(), entry.getValue());
+        }
+    }
+
+    //Display final path
+    public static void displayFinalPath(List<String> path) {
+        System.out.printf("Final Path: %s", path.get(0));
+        for (int index=1; index < path.size(); index++) {
+            System.out.printf(" -> %s", path.get(index));
+        }
+    }
 
     // Turning the map into a graph
     public static void addPath( Map<String, Map<String, Integer>> outerMap,
@@ -132,6 +172,7 @@ public class program {
         for(int x = 0; x<path.size()-1; x++){
             String city1 = path.get(x);
             String city2 = path.get(x+1);
+            System.out.printf("%n%-18s -> %-18s(Cost: %s %s)", city1, city2, "", outerMap.get(city1).get(city2));
 
             currentTotal += outerMap.get(city1).get(city2); //uses the pair of cities to retrieve the associated path cost from the graph
         }
