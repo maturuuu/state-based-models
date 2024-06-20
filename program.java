@@ -76,6 +76,12 @@ public class program {
             System.out.println("\nTotal Path Cost: " + Greedycost);
             displayFinalPath(pathStartToFinishGreedy);
         }
+
+        Scanner scanner2 = new Scanner(System.in);
+        System.out.println("\n\nPress [ENTER] to exit.");
+        String x = scanner2.nextLine();
+        scanner.close();
+        scanner2.close();
     }
 
     //--------------------------------------------------------------------------------------------
