@@ -38,14 +38,6 @@ public class program {
         // Create maps
         createMap(outerMap, heuristicMap, heuristicVal);
 
-        /* debugging
-        for (Map.Entry<String, Integer> entry : heuristicMap.entrySet()) {
-             String city = entry.getKey();
-             Integer heuristicValue = entry.getValue();
-             System.out.println("City: " + city + ", Heuristic value: " + heuristicValue);
-         }
-        debugging ^ */
-
         System.out.printf("%nPaths in Map");
         displayOuterMap(4, outerMap);
         System.out.printf("%nHeuristic Values");
@@ -53,7 +45,12 @@ public class program {
 
         // execute BFS
         System.out.println("\n\nUsing Breadth First Search:");
+
+        long bfs_start = System.nanoTime(); //bfs start time
         List<String> pathStartToFinish = breadthFirstSearch(outerMap, startCity, goalCity);
+        long bfs_end = System.nanoTime(); //bfs end time
+        long bfs_totaltime = bfs_end - bfs_start;
+
         if (pathStartToFinish.isEmpty()){
             System.out.println("No path exists from " + startCity + " to " + goalCity);
         }
@@ -63,10 +60,16 @@ public class program {
             System.out.println("\nTotal Path Cost: " + BFScost);
             displayFinalPath(pathStartToFinish);
         }
+        System.out.println("\nBFS Duration: " + bfs_totaltime + " ns");
             
         // execute Greedy best-first search
         System.out.println("\n\nUsing Greedy Best-First Search:");
+
+        long gbfs_start = System.nanoTime(); //bfs start time
         List<String> pathStartToFinishGreedy = greedyBestFirstSearch(outerMap, heuristicMap, startCity, goalCity);
+        long gbfs_end = System.nanoTime(); //bfs end time
+        long gbfs_totaltime = gbfs_end - gbfs_start;
+
         if (pathStartToFinishGreedy.isEmpty()) {
             System.out.println("No path exists from " + startCity + " to " + goalCity);
         } 
@@ -76,6 +79,7 @@ public class program {
             System.out.println("\nTotal Path Cost: " + Greedycost);
             displayFinalPath(pathStartToFinishGreedy);
         }
+        System.out.println("\nGBFS Duration: " + gbfs_totaltime + " ns");
 
         Scanner scanner2 = new Scanner(System.in);
         System.out.println("\n\nPress [ENTER] to exit.");
